@@ -53,6 +53,39 @@ app.post("/api/tasks", (req, res) => {
     }
 });
 
+// Удаление задачи
+app.delete("/api/tasks/:id", (req, res) => {
+    try {
+        const id = Number(req.params.id);
+
+        if (!Number.isInteger(id) || id <= 0) {
+            return res.status(400).json({
+                message: "Некорректный ID задачи"
+            });
+        }
+
+        const result = db.prepare(`
+            DELETE FROM Tasks
+            WHERE id = ?
+        `).run(id);
+
+        if (result.changes === 0) {
+            return res.status(404).json({
+                message: "Задача не найдена"
+            });
+        }
+
+        res.json({
+            message: "Задача удалена"
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Ошибка удаления задачи"
+        });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Сервер запущен на порту ${PORT}`);
 });
