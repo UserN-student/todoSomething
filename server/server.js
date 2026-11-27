@@ -86,6 +86,49 @@ app.delete("/api/tasks/:id", (req, res) => {
     }
 });
 
+// Изменение статуса задачи
+app.patch("/api/tasks/:id", (req, res) => {
+    try {
+        const id = Number(req.params.id);
+        const { completed } = req.body;
+
+        if (!Number.isInteger(id) || id <= 0) {
+            return res.status(400).json({
+                message: "Некорректный ID задачи",
+            });
+        }
+
+        if (typeof completed !== "boolean") {
+            return res.status(400).json({
+                message: "Статус должен быть true или false",
+            });
+        }
+
+        const result = db
+            .prepare(`
+                UPDATE Tasks
+                SET completed = ?
+                WHERE id = ?
+            `)
+            .run(completed ? 1 : 0, id);
+
+        if (result.changes === 0) {
+            return res.status(404).json({
+                message: "Задача не найдена",
+            });
+        }
+
+        res.json({
+            message: "Статус задачи обновлён",
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Ошибка изменения статуса",
+        });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Сервер запущен на порту ${PORT}`);
 });
