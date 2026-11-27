@@ -90,3 +90,23 @@ async function deleteTask(id) {
 
     loadTasks();
 }
+
+async function updateTaskStatus(id, completed) {
+    const response = await fetch(`http://localhost:3000/api/tasks/${id}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            completed: completed,
+        }),
+    });
+
+    if (!response.ok) {
+        alert("Не удалось изменить статус задачи");
+        await loadTasks();
+        return;
+    }
+
+    loadTasks();
+}
