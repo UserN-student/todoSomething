@@ -1,39 +1,35 @@
-# Todo List API
+# Todo List
 
 ## Требования
 
 - Node.js 22
 - Git
 
-## 1. Скачивание проекта
-
-Откройте терминал и выполните:
+## Скачивание проекта
 
 ```bash
 git clone https://github.com/UserN-student/todoSomething.git
-cd todoSomething
+cd todoSomething/server
 ```
 
-## 2. Установка зависимостей
+## Установка зависимостей
 
 ```bash
 npm install
 ```
 
-Если папка `database` отсутствует, создайте её:
+Если папка database отсутствует, создайте её:
 
 ```bash
 mkdir database
 ```
 
-## 3. Запуск проекта
+## Запуск
 
 ```bash
 node server.js
 ```
 
-Сервер будет запущен на порту 3000.
+Откройте файл client/index.html в браузере.
 
-База данных создаётся автоматически при запуске.
-
-Для остановки сервера нажмите `Ctrl + C`.
+Для остановки сервера нажмите Ctrl + C.

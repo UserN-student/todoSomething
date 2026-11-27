@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo List</title>
+</head>
+<body>
+    <h1>Список задач</h1>
+    <form id="taskForm">
+        <input type="text" id="taskTitle" placeholder="Введите задачу" required />
+        <select id="taskPriority">
+            <option value="Низкий">Низкий</option>
+            <option value="Средний">Средний</option>
+            <option value="Высокий">Высокий</option>
+        </select>
+        <button type="submit">Добавить</button>
+    </form>
+    <h2>Мои задачи</h2>
+    <ul id="taskList"></ul>
+    <script src="script.js"></script>
+</body>
+</html>
