@@ -1,9 +1,11 @@
 const express = require("express");
+const path = require("path");
 const db = require("./db");
 const app = express();
 const PORT = 3000;
 
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "../client")));
 
 // Получение всех задач из БД
 app.get("/api/tasks", (req, res) => {
@@ -23,14 +25,12 @@ app.post("/api/tasks", (req, res) => {
     try {
         const { title, priority } = req.body;
 
-        // Проверяем входные данные
         if (!title || !priority) {
             return res.status(400).json({
                 message: "Название и приоритет обязательны",
             });
         }
 
-        // Добавляем задачу в БД
         const result = db
             .prepare(`
                 INSERT INTO Tasks (title, priority)
@@ -38,7 +38,6 @@ app.post("/api/tasks", (req, res) => {
             `)
             .run(title.trim(), priority);
 
-        // Отправляем ответ
         res.status(201).json({
             message: "Задача добавлена",
             id: result.lastInsertRowid,
