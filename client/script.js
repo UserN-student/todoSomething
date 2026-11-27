@@ -20,19 +20,31 @@ async function loadTasks() {
 taskForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    await fetch("http://localhost:3000/api/tasks", {
+    const newTask = {
+        title: taskTitle.value.trim(),
+        priority: taskPriority.value,
+    };
+
+    if (!newTask.title) {
+        return;
+    }
+
+    const response = await fetch("http://localhost:3000/api/tasks", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-            title: taskTitle.value,
-            priority: taskPriority.value,
-        }),
+        body: JSON.stringify(newTask),
     });
 
-    taskForm.reset();
+    if (!response.ok) {
+        alert("Не удалось добавить задачу");
+        return;
+    }
+
+    taskTitle.value = "";
     loadTasks();
 });
 
+// Загрузка задач при открытии страницы
 loadTasks();
