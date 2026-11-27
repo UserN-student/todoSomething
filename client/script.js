@@ -11,15 +11,34 @@ async function loadTasks() {
 
     tasks.forEach((task) => {
         const li = document.createElement("li");
+
+        // Создаём checkbox
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.checked = task.completed === 1;
+
+        // Создаём название задачи
         const title = document.createElement("span");
         title.textContent = `${task.title} | ${task.priority}`;
 
+        // Если задача выполнена, зачёркиваем название
+        if (task.completed === 1) {
+            title.style.textDecoration = "line-through";
+        }
+
+        // Обработка изменения checkbox
+        checkbox.addEventListener("change", () => {
+            updateTaskStatus(task.id, checkbox.checked);
+        });
+
+        // Кнопка удаления
         const deleteButton = document.createElement("button");
         deleteButton.textContent = "Удалить";
         deleteButton.addEventListener("click", () => {
             deleteTask(task.id);
         });
 
+        li.appendChild(checkbox);
         li.appendChild(title);
         li.appendChild(deleteButton);
         taskList.appendChild(li);
