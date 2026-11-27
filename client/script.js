@@ -11,7 +11,17 @@ async function loadTasks() {
 
     tasks.forEach((task) => {
         const li = document.createElement("li");
-        li.textContent = `${task.title} | ${task.priority}`;
+        const title = document.createElement("span");
+        title.textContent = `${task.title} | ${task.priority}`;
+
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "Удалить";
+        deleteButton.addEventListener("click", () => {
+            deleteTask(task.id);
+        });
+
+        li.appendChild(title);
+        li.appendChild(deleteButton);
         taskList.appendChild(li);
     });
 }
@@ -48,3 +58,16 @@ taskForm.addEventListener("submit", async (event) => {
 
 // Загрузка задач при открытии страницы
 loadTasks();
+
+async function deleteTask(id) {
+    const response = await fetch(`http://localhost:3000/api/tasks/${id}`, {
+        method: "DELETE",
+    });
+
+    if (!response.ok) {
+        alert("Не удалось удалить задачу");
+        return;
+    }
+
+    loadTasks();
+}
