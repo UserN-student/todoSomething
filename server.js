@@ -1,41 +1,23 @@
-// require("express") — подключает установленную библиотеку Express
 const express = require("express");
-
-// express() — создаёт экземпляр приложения Express
+const db = require("./db");
 const app = express();
 const PORT = 3000;
 
-// express.json() — промежуточное программное обеспечение (middleware),
-// которое проверяет входящие запросы с JSON и преобразует их содержимое в JavaScript-объект
 app.use(express.json());
 
-app.get("/", (req, res) => {
-    res.send("Todo List API работает!");
+// Получение всех задач из БД
+app.get("/api/tasks", (req, res) => {
+    try {
+        const tasks = db.prepare("SELECT * FROM Tasks").all();
+        res.json(tasks);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Ошибка получения задач",
+        });
+    }
 });
 
-// app.get() регистрирует обработчик GET-запроса.
-// Первый аргумент — адрес маршрута. В нашем случае / означает корневой адрес сервера.
-// Второй аргумент — функция, которая выполняется при получении соответствующего запроса.
-// В Express обработчик маршрута получает два основных объекта:
-// - req (Request) — содержит информацию о входящем запросе.
-// - res (Response) — используется для формирования и отправки ответа клиенту.
-// Например, через req можно получить параметры запроса, а через res отправить текст, JSON или статус HTTP.
-
-// Получение данных
-app.post("/api/tasks", (req, res) => {
-    // req.body — свойство объекта запроса req,
-    // в котором находятся данные, переданные клиентом в теле HTTP-запроса
-    const title = req.body.title;
-    console.log("Получена задача:", title);
-
-    // res.json() — это метод Express, который отправляет клиенту ответ в формате JSON.
-    res.json({
-        message: "Задача получена",
-        title: title,
-    });
-});
-
-// app.listen() — запускает сервер и начинает прослушивать указанный порт
 app.listen(PORT, () => {
     console.log(`Сервер запущен на порту ${PORT}`);
 });
